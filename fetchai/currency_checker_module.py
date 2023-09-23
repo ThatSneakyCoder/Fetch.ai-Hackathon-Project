@@ -7,17 +7,15 @@ from gui_interface import create_gui
 currency_checker = Agent(name="currency_checker", seed="currency recovery phrase")
 
 
-@currency_checker.on_interval(period=60.0)
+@currency_checker.on_interval(period=5.0)
 async def fetch_currency_rate(ctx: Context):
 
     for i in range(0, len(base_currency), 1):
 
-        base_currency_var = base_currency[i].upper()
-        target_currency_var = target_currency[i].upper()
+        base_currency_var = base_currency[i].strip().upper()
+        target_currency_var = target_currency[i].strip().upper()
         end = float(max_values_float[i])
-        print(end)
         start = float(min_values_float[i])
-        print(start)
 
         api_url = f"https://theforexapi.com/api/latest?base={base_currency_var}&symbols={target_currency_var}%20HTTP/2"
         response = requests.get(api_url)
@@ -25,10 +23,8 @@ async def fetch_currency_rate(ctx: Context):
         if response.status_code == 200:
             data = json.loads(response.text)
             exchange_rate = float(data['rates'][target_currency_var])
-            print(f"Current exchange rate is {exchange_rate}")
 
             if exchange_rate < start or end < exchange_rate:
-                print("If condition entered")
                 notification.notify(
                     title=f'Currency Update: {base_currency_var} to {target_currency_var}',
                     message=f"Exchange rate of 1 {base_currency_var} is {exchange_rate} {target_currency_var}",
