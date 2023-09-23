@@ -11,9 +11,6 @@ requests = "2.25.1"
 plyer = "2.1.0"
 uagents = "0.6.2"
 
-[tool.poetry.group.dev.dependencies]
-pyinstaller = "^6.0.0"
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
